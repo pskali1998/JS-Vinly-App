@@ -1,19 +1,24 @@
 import React, { Component } from 'react';
-import { getMovies, getMovie } from '../services/fakeMovieService';
+import { getMovies } from '../services/fakeMovieService';
  class NewCompo extends Component {
      state = { 
          objmov : getMovies()
       }
     handleDelete = currmovie =>{
         const newMov = this.state.objmov.filter(m => m._id !== currmovie._id)
-        //console.log(newMov);
+        //  console.log(newMov);
         this.setState({objmov:newMov});
         //console.log(this.state.objmov);
 
     };
      render() { 
+         // Adding the message list :
+         // Obj Destructuring into moviesNo
+         const {length: moviesNo} = this.state.objmov;
+         if(moviesNo===0) return <p>No Movies Left</p>
          return ( 
          <div>
+             <p>Movies No are {moviesNo} .</p>
              <table className='table'>
                  <thead>
                      <tr>
