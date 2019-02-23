@@ -10,7 +10,6 @@ class App extends Component {
     return (
       <React.Fragment>
         <main className="container">
-        <h1>POOP</h1>
         <NewCompo />
         </main>
       </React.Fragment>
