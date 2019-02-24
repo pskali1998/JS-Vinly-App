@@ -14,7 +14,8 @@ class NewCompo extends Component {
   };
   // intialize here all property renderd from backend instance will only be rendered if and only if it recive data from backend
   componentDidMount() {
-    this.setState({ objmov: getMovies(), genres: getGenres() });
+    const genres = [{ name: "All Genres" }, ...getGenres()];
+    this.setState({ objmov: getMovies(), genres });
   }
   handleDelete = currmovie => {
     const newMov = this.state.objmov.filter(m => m._id !== currmovie._id);
@@ -35,15 +36,19 @@ class NewCompo extends Component {
     this.setState({ currentPage: page });
   };
   handleGenreSelect = genre => {
-    this.setState({ selectedGenre: genre });
+    this.setState({ selectedGenre: genre, currentPage: 1 });
   };
   render() {
     // Adding the message list :
     // Obj Destructuring into moviesNo
     const { length: moviesNo } = this.state.objmov;
-    const { pageSize, currentPage, objmov } = this.state;
+    const { pageSize, currentPage, objmov, selectedGenre } = this.state;
     if (moviesNo === 0) return <p>No Movies Left</p>;
-    const movies = paginate(objmov, currentPage, pageSize);
+    const filtered =
+      selectedGenre && selectedGenre._id
+        ? objmov.filter(m => m.genre._id === selectedGenre._id)
+        : objmov;
+    const movies = paginate(filtered, currentPage, pageSize);
     return (
       <div className="row">
         <div className="col-3">
@@ -54,7 +59,7 @@ class NewCompo extends Component {
           />
         </div>
         <div className="col">
-          <p>Movies No are {moviesNo} .</p>
+          <p>Movies No are {filtered.length} .</p>
           <table className="table">
             <thead>
               <tr>
@@ -92,7 +97,7 @@ class NewCompo extends Component {
             ))}
           </table>
           <Pagination
-            itemsCount={moviesNo}
+            itemsCount={filtered.length}
             currentPage={currentPage}
             pageSize={pageSize}
             onPageChange={this.handlePageChange}
