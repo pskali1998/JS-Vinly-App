@@ -14,7 +14,7 @@ class NewCompo extends Component {
   };
   // intialize here all property renderd from backend instance will only be rendered if and only if it recive data from backend
   componentDidMount() {
-    const genres = [{ name: "All Genres" }, ...getGenres()];
+    const genres = [{ _id: "", name: "All Genres" }, ...getGenres()];
     this.setState({ objmov: getMovies(), genres });
   }
   handleDelete = currmovie => {
@@ -37,6 +37,9 @@ class NewCompo extends Component {
   };
   handleGenreSelect = genre => {
     this.setState({ selectedGenre: genre, currentPage: 1 });
+  };
+  handleSort = path => {
+    console.log(path);
   };
   render() {
     // Adding the message list :
@@ -64,6 +67,7 @@ class NewCompo extends Component {
             movies={movies}
             onLike={this.handleLike}
             onDelete={this.handleDelete}
+            onSort={this.handleSort}
           />
           <Pagination
             itemsCount={filtered.length}
