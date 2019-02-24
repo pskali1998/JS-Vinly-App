@@ -5,12 +5,14 @@ import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
 import { getGenres } from "../services/fakeGenreService";
+import _ from "lodash";
 class NewCompo extends Component {
   state = {
     objmov: [], // need to define the both backend entities as empty as it take time for backend to render the value and we don't want these property to be undifined for that part
     genres: [], // to make more robust our application
     pageSize: 4,
-    currentPage: 1
+    currentPage: 1,
+    sortColumn: { path: "title", order: "asc" }
   };
   // intialize here all property renderd from backend instance will only be rendered if and only if it recive data from backend
   componentDidMount() {
@@ -39,19 +41,26 @@ class NewCompo extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
   handleSort = path => {
-    console.log(path);
+    this.setState({ sortColumn: { path, order: "asc" } });
   };
   render() {
     // Adding the message list :
     // Obj Destructuring into moviesNo
     const { length: moviesNo } = this.state.objmov;
-    const { pageSize, currentPage, objmov, selectedGenre } = this.state;
+    const {
+      pageSize,
+      currentPage,
+      objmov,
+      selectedGenre,
+      sortColumn
+    } = this.state;
     if (moviesNo === 0) return <p>No Movies Left</p>;
     const filtered =
       selectedGenre && selectedGenre._id
         ? objmov.filter(m => m.genre._id === selectedGenre._id)
         : objmov;
-    const movies = paginate(filtered, currentPage, pageSize);
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const movies = paginate(sorted, currentPage, pageSize);
     return (
       <div className="row">
         <div className="col-3">
