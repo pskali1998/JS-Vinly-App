@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
-import Like from "./common/like";
+import MoviesTable from "./moviesTable";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import ListGroup from "./common/listGroup";
@@ -60,42 +60,11 @@ class NewCompo extends Component {
         </div>
         <div className="col">
           <p>Movies No are {filtered.length} .</p>
-          <table className="table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Genre</th>
-                <th>Stock</th>
-                <th>Rate</th>
-                <th />
-                <th />
-              </tr>
-            </thead>
-            {movies.map(movdata => (
-              <tbody key={movdata._id}>
-                <tr>
-                  <td>{movdata.title}</td>
-                  <td>{movdata.genre.name}</td>
-                  <td>{movdata.numberInStock}</td>
-                  <td>{movdata.dailyRentalRate}</td>
-                  <td>
-                    <Like
-                      liked={movdata.liked}
-                      onClick={() => this.handleLike(movdata)}
-                    />
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => this.handleDelete(movdata)}
-                      className="btn btn-danger btn-sm"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            ))}
-          </table>
+          <MoviesTable
+            movies={movies}
+            onLike={this.handleLike}
+            onDelete={this.handleDelete}
+          />
           <Pagination
             itemsCount={filtered.length}
             currentPage={currentPage}
