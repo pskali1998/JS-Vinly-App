@@ -43,24 +43,29 @@ class NewCompo extends Component {
   handleSort = sortColumn => {
     this.setState({ sortColumn });
   };
-  render() {
-    // Adding the message list :
-    // Obj Destructuring into moviesNo
-    const { length: moviesNo } = this.state.objmov;
+  getPageData = () => {
     const {
-      pageSize,
-      currentPage,
       objmov,
       selectedGenre,
+      pageSize,
+      currentPage,
       sortColumn
     } = this.state;
-    if (moviesNo === 0) return <p>No Movies Left</p>;
     const filtered =
       selectedGenre && selectedGenre._id
         ? objmov.filter(m => m.genre._id === selectedGenre._id)
         : objmov;
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const movies = paginate(sorted, currentPage, pageSize);
+    return { totalCount: filtered.length, data: movies };
+  };
+  render() {
+    // Adding the message list :
+    // Obj Destructuring into moviesNo
+    const { length: moviesNo } = this.state.objmov;
+    const { pageSize, currentPage, sortColumn } = this.state;
+    if (moviesNo === 0) return <p>No Movies Left</p>;
+    const { totalCount, data } = this.getPageData();
     return (
       <div className="row">
         <div className="col-3">
@@ -71,16 +76,16 @@ class NewCompo extends Component {
           />
         </div>
         <div className="col">
-          <p>Movies No are {filtered.length} .</p>
+          <p>Movies No are {totalCount} .</p>
           <MoviesTable
-            movies={movies}
+            movies={data}
             sortColumn={sortColumn} // we added sort coloum as a props as bcoz when ever user get awsay from the moviesTable component and comes back they must maintain the sort order of previous sort order done befoure :
             onLike={this.handleLike}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
           />
           <Pagination
-            itemsCount={filtered.length}
+            itemsCount={totalCount}
             currentPage={currentPage}
             pageSize={pageSize}
             onPageChange={this.handlePageChange}
