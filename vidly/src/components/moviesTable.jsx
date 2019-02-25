@@ -6,7 +6,7 @@ import TableBody from "./common/tableBody";
 class MoviesTable extends Component {
   columns = [
     { path: "title", lable: "Title" },
-    { path: "genre", lable: "Genre" },
+    { path: "genre.name", lable: "Genre" },
     { path: "numberInStock", lable: "Stock" },
     { path: "dailyRentalRate", lable: "Rate" },
     {
