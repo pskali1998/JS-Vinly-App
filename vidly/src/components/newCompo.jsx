@@ -40,14 +40,7 @@ class NewCompo extends Component {
   handleGenreSelect = genre => {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
-  handleSort = path => {
-    const sortColumn = { ...this.state.sortColumn };
-    if (sortColumn.path === path)
-      sortColumn.order = sortColumn.order === "asc" ? "desc" : "asc";
-    else {
-      sortColumn.path = path;
-      sortColumn.order = "asc";
-    }
+  handleSort = sortColumn => {
     this.setState({ sortColumn });
   };
   render() {
@@ -81,6 +74,7 @@ class NewCompo extends Component {
           <p>Movies No are {filtered.length} .</p>
           <MoviesTable
             movies={movies}
+            sortColumn={sortColumn} // we added sort coloum as a props as bcoz when ever user get awsay from the moviesTable component and comes back they must maintain the sort order of previous sort order done befoure :
             onLike={this.handleLike}
             onDelete={this.handleDelete}
             onSort={this.handleSort}
